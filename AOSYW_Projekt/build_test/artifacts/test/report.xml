@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<TestRun>
+	<FailedTests/>
+	<SuccessfulTests>
+		<Test id="1">
+			<Name>test/test_SensorManager.c::test_isThereSensorInit</Name>
+		</Test>
+		<Test id="2">
+			<Name>test/test_SensorManager.c::test_doesSensorInitReturnSensor</Name>
+		</Test>
+	</SuccessfulTests>
+	<IgnoredTests>
+		<Test id="3">
+			<Name>test/test_SensorManager.c::test_SensorManager_NeedToImplement</Name>
+		</Test>
+	</IgnoredTests>
+	<Statistics>
+		<Tests>3</Tests>
+		<Ignores>1</Ignores>
+		<FailuresTotal>0</FailuresTotal>
+		<Errors>0</Errors>
+		<Failures>0</Failures>
+	</Statistics>
+</TestRun>
