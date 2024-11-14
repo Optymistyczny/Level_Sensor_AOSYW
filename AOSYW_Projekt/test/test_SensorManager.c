@@ -43,7 +43,7 @@ void test_isThereSensorInit(void)
 */
 
 /**
- * Test napisany, ale nie przechodzi, więc jesteśmy w fazie RED.
+ * Test napisany, ale nie przechodzi, więc jesteśmy w fazie RED...
  */
 void test_doesSensorInitReturnSensor(void)
 {
