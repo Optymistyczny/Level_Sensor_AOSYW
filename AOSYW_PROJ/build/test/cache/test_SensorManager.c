@@ -22,15 +22,15 @@ void test_isSensorInit(void)
 
 {
 
-    uint8_t id;
+    uint8_t id=1;
 
     char name[50];
 
-    interface_t interface;
+    interface_t interface=ADC;
 
-    sensor_t* sensor;
+    sensor_t sensor;
 
-    SensorInit(sensor, name, interface,id);
+    SensorInit(&sensor, name, interface,id);
 
 }
 
@@ -40,19 +40,19 @@ void test_ReturnStatusWhenGoodArguments(void)
 
 {
 
-    uint8_t id;
+    uint8_t id=1;
 
     char name[50];
 
-    interface_t interface;
+    interface_t interface=ADC;
 
-    sensor_t* sensor;
+    sensor_t sensor;
 
 
 
     status_t status;
 
-    status=SensorInit(sensor, name, interface,id);
+    status=SensorInit(&sensor, name, interface,id);
 
     UnityAssertEqualNumber((UNITY_INT)(UNITY_UINT8 )((OK)), (UNITY_INT)(UNITY_UINT8 )((status)), (
 
@@ -68,11 +68,11 @@ void test_nullSensor(void)
 
 {
 
-    uint8_t id;
+    uint8_t id=1;
 
     char name[50];
 
-    interface_t interface;
+    interface_t interface=ADC;
 
     status_t status=SensorInit(
 
@@ -94,17 +94,17 @@ void test_nullName(void)
 
 {
 
-    uint8_t id;
+    uint8_t id=1;
 
-    interface_t interface;
+    interface_t interface=ADC;
 
-    sensor_t* sensor;
+    sensor_t sensor;
 
-    status_t status=SensorInit(sensor, 
+    status_t status=SensorInit(&sensor, 
 
-                                      ((void *)0)
+                                       ((void *)0)
 
-                                          , interface, id);
+                                           , interface, id);
 
     UnityAssertEqualNumber((UNITY_INT)((ERROR)), (UNITY_INT)((status)), (
 
@@ -128,15 +128,15 @@ void test_BadInterface(void)
 
 {
 
-    uint8_t id;
+    uint8_t id=1;
 
     char name[50];
 
-    sensor_t* sensor;
+    sensor_t sensor;
 
 
 
-    status_t status=SensorInit(sensor, name, 100, id);
+    status_t status=SensorInit(&sensor, name, 100, id);
 
     UnityAssertEqualNumber((UNITY_INT)((ERROR)), (UNITY_INT)((status)), (
 
@@ -146,7 +146,7 @@ void test_BadInterface(void)
 
 
 
-    status=SensorInit(sensor, name, ADC, id);
+    status=SensorInit(&sensor, name, ADC, id);
 
     UnityAssertEqualNumber((UNITY_INT)((OK)), (UNITY_INT)((status)), (
 
@@ -156,7 +156,7 @@ void test_BadInterface(void)
 
 
 
-    status=SensorInit(sensor, name, UART, id);
+    status=SensorInit(&sensor, name, UART, id);
 
     UnityAssertEqualNumber((UNITY_INT)((OK)), (UNITY_INT)((status)), (
 
@@ -166,7 +166,7 @@ void test_BadInterface(void)
 
 
 
-    status=SensorInit(sensor, name, I2C, id);
+    status=SensorInit(&sensor, name, I2C, id);
 
     UnityAssertEqualNumber((UNITY_INT)((OK)), (UNITY_INT)((status)), (
 
@@ -176,12 +176,76 @@ void test_BadInterface(void)
 
 
 
-    status=SensorInit(sensor, name, -1, id);
+    status=SensorInit(&sensor, name, -1, id);
 
     UnityAssertEqualNumber((UNITY_INT)((ERROR)), (UNITY_INT)((status)), (
 
    ((void *)0)
 
    ), (UNITY_UINT)(74), UNITY_DISPLAY_STYLE_INT);
+
+}
+
+
+
+void test_ID_only_positive(void)
+
+{
+
+    char name[50];
+
+    sensor_t sensor;
+
+    interface_t interface=ADC;
+
+    status_t status=SensorInit(&sensor, name, interface, 0);
+
+    UnityAssertEqualNumber((UNITY_INT)((ERROR)), (UNITY_INT)((status)), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(83), UNITY_DISPLAY_STYLE_INT);
+
+}
+
+
+
+void test_proper_sensor_initialization(void)
+
+{
+
+    uint8_t id=1;
+
+    char name[]="Water level sensor";
+
+    interface_t interface=ADC;
+
+    sensor_t sensor;
+
+    status_t status=SensorInit(&sensor,name, interface,id);
+
+    UnityAssertEqualNumber((UNITY_INT)((OK)), (UNITY_INT)((status)), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(93), UNITY_DISPLAY_STYLE_INT);
+
+    UnityAssertEqualNumber((UNITY_INT)((0)), (UNITY_INT)((strcmp(sensor.name,"Water level sensor"))), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(94), UNITY_DISPLAY_STYLE_INT);
+
+    UnityAssertEqualNumber((UNITY_INT)((ADC)), (UNITY_INT)((sensor.interface)), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(95), UNITY_DISPLAY_STYLE_INT);
+
+    UnityAssertEqualNumber((UNITY_INT)((1)), (UNITY_INT)((sensor.id)), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(96), UNITY_DISPLAY_STYLE_INT);
 
 }
