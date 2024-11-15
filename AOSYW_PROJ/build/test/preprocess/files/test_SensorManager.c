@@ -22,11 +22,11 @@ void test_isSensorInit(void)
 
 {
 
-    uint8_t id;
+    uint8_t id=1;
 
     char name[50];
 
-    interface_t interface;
+    interface_t interface=ADC;
 
     sensor_t* sensor;
 
@@ -40,11 +40,11 @@ void test_ReturnStatusWhenGoodArguments(void)
 
 {
 
-    uint8_t id;
+    uint8_t id=1;
 
     char name[50];
 
-    interface_t interface;
+    interface_t interface=ADC;
 
     sensor_t* sensor;
 
@@ -68,11 +68,11 @@ void test_nullSensor(void)
 
 {
 
-    uint8_t id;
+    uint8_t id=1;
 
     char name[50];
 
-    interface_t interface;
+    interface_t interface=ADC;
 
     status_t status=SensorInit(
 
@@ -94,9 +94,9 @@ void test_nullName(void)
 
 {
 
-    uint8_t id;
+    uint8_t id=1;
 
-    interface_t interface;
+    interface_t interface=ADC;
 
     sensor_t* sensor;
 
@@ -128,7 +128,7 @@ void test_BadInterface(void)
 
 {
 
-    uint8_t id;
+    uint8_t id=1;
 
     char name[50];
 
@@ -183,5 +183,27 @@ void test_BadInterface(void)
    ((void *)0)
 
    ), (UNITY_UINT)(74), UNITY_DISPLAY_STYLE_INT);
+
+}
+
+
+
+void test_ID_only_positive(void)
+
+{
+
+    char name[50];
+
+    sensor_t* sensor;
+
+    interface_t interface=ADC;
+
+    status_t status=SensorInit(sensor, name, interface, 0);
+
+    UnityAssertEqualNumber((UNITY_INT)((ERROR)), (UNITY_INT)((status)), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(83), UNITY_DISPLAY_STYLE_INT);
 
 }
