@@ -1,0 +1,8 @@
+# Ignoruj wszystko
+*
+
+# Wyjątki - ścieżki do dodania
+!.gitignore
+!/AOSYW_PROJ/
+!/AOSYW_PROJ/src/
+!/AOSYW_PROJ/test/*.c
