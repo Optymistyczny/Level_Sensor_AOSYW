@@ -2,7 +2,7 @@
 *
 
 # Wyjątki - ścieżki do dodania
-!.gitignore
+!/.gitignore
 !/AOSYW_PROJ/
-!/AOSYW_PROJ/src/
+!/AOSYW_PROJ/src/*.c
 !/AOSYW_PROJ/test/*.c
