@@ -1,3 +1,0 @@
----
-- C:/Users/kubas/scoop/persist/ruby30/gems/gems/ceedling-0.31.1/vendor/unity/src/unity.h
-- src/SensorManager.h
