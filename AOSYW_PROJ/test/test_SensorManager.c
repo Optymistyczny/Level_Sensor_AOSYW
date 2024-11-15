@@ -73,3 +73,12 @@ void test_BadInterface(void)
     status=SensorInit(sensor, name, -1, id);
     TEST_ASSERT_EQUAL(ERROR,status);
 }
+
+void test_ID_only_positive(void)
+{
+    char name[50];
+    sensor_t* sensor;
+    interface_t interface;
+    status_t status=SensorInit(sensor, name, interface, 0);
+    TEST_ASSERT_EQUAL(ERROR,status);
+}
