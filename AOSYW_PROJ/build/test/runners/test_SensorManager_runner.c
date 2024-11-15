@@ -10,9 +10,11 @@ char* GlobalOrderError;
 /*=======External Functions This Runner Calls=====*/
 extern void setUp(void);
 extern void tearDown(void);
-extern void test_SensorManager_NeedToImplement(void);
 extern void test_isSensorInit(void);
-extern void test_SensorInitReturnValue(void);
+extern void test_ReturnStatusWhenGoodArguments(void);
+extern void test_nullSensor(void);
+extern void test_nullName(void);
+extern void test_BadInterface(void);
 
 
 /*=======Mock Management=====*/
@@ -77,9 +79,11 @@ static void run_test(UnityTestFunction func, const char* name, UNITY_LINE_TYPE l
 int main(void)
 {
   UnityBegin("test_SensorManager.c");
-  run_test(test_SensorManager_NeedToImplement, "test_SensorManager_NeedToImplement", 12);
-  run_test(test_isSensorInit, "test_isSensorInit", 17);
-  run_test(test_SensorInitReturnValue, "test_SensorInitReturnValue", 27);
+  run_test(test_isSensorInit, "test_isSensorInit", 12);
+  run_test(test_ReturnStatusWhenGoodArguments, "test_ReturnStatusWhenGoodArguments", 21);
+  run_test(test_nullSensor, "test_nullSensor", 33);
+  run_test(test_nullName, "test_nullName", 42);
+  run_test(test_BadInterface, "test_BadInterface", 55);
 
   return UnityEnd();
 }

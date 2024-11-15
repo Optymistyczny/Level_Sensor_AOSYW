@@ -1,24 +1,36 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <TestRun>
-	<FailedTests/>
-	<SuccessfulTests>
+	<FailedTests>
 		<Test id="1">
+			<Name>test/test_SensorManager.c::test_BadInterface</Name>
+			<FailureType>Assertion</FailureType>
+			<Location>
+				<File>test/test_SensorManager.c</File>
+				<Line>61</Line>
+			</Location>
+			<Message>Expected 2 Was 0</Message>
+		</Test>
+	</FailedTests>
+	<SuccessfulTests>
+		<Test id="2">
 			<Name>test/test_SensorManager.c::test_isSensorInit</Name>
 		</Test>
-		<Test id="2">
-			<Name>test/test_SensorManager.c::test_SensorInitReturnValue</Name>
+		<Test id="3">
+			<Name>test/test_SensorManager.c::test_ReturnStatusWhenGoodArguments</Name>
+		</Test>
+		<Test id="4">
+			<Name>test/test_SensorManager.c::test_nullSensor</Name>
+		</Test>
+		<Test id="5">
+			<Name>test/test_SensorManager.c::test_nullName</Name>
 		</Test>
 	</SuccessfulTests>
-	<IgnoredTests>
-		<Test id="3">
-			<Name>test/test_SensorManager.c::test_SensorManager_NeedToImplement</Name>
-		</Test>
-	</IgnoredTests>
+	<IgnoredTests/>
 	<Statistics>
-		<Tests>3</Tests>
-		<Ignores>1</Ignores>
-		<FailuresTotal>0</FailuresTotal>
+		<Tests>5</Tests>
+		<Ignores>0</Ignores>
+		<FailuresTotal>1</FailuresTotal>
 		<Errors>0</Errors>
-		<Failures>0</Failures>
+		<Failures>1</Failures>
 	</Statistics>
 </TestRun>

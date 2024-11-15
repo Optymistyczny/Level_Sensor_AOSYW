@@ -16,7 +16,7 @@ struct sensor
 };
 typedef struct sensor sensor_t;
 
-enum status {OK, FAIL};
+enum status {OK, FAIL, ERROR};
 typedef enum status status_t;
 
 status_t SensorInit(sensor_t* sensor, char* name,interface_t interface, uint8_t id);
