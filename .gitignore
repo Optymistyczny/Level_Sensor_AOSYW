@@ -1,8 +1,24 @@
-# Ignoruj wszystko
-*
+# Ignoruj wszystko w katalogu głównym
+/*
 
-# Wyjątki - ścieżki do dodania
+# Nie ignoruj samego pliku .gitignore
 !/.gitignore
+
+# Nie ignoruj katalogu AOSYW_PROJ
 !/AOSYW_PROJ/
+
+# Wewnątrz AOSYW_PROJ ignoruj wszystko
+/AOSYW_PROJ/*
+
+# Nie ignoruj katalogów src i test w AOSYW_PROJ
+!/AOSYW_PROJ/src/
+!/AOSYW_PROJ/test/
+
+# Ignoruj wszystko wewnątrz test i src, ale nie ich zawartość
+/AOSYW_PROJ/test/*
+/AOSYW_PROJ/src/*
+
+# Nie ignoruj wszystkich plików .c i .h w src i test
 !/AOSYW_PROJ/src/*.c
+!/AOSYW_PROJ/src/*.h
 !/AOSYW_PROJ/test/*.c
