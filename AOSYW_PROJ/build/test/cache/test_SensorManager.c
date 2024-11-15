@@ -134,12 +134,54 @@ void test_BadInterface(void)
 
     sensor_t* sensor;
 
+
+
     status_t status=SensorInit(sensor, name, 100, id);
 
     UnityAssertEqualNumber((UNITY_INT)((ERROR)), (UNITY_INT)((status)), (
 
    ((void *)0)
 
-   ), (UNITY_UINT)(61), UNITY_DISPLAY_STYLE_INT);
+   ), (UNITY_UINT)(62), UNITY_DISPLAY_STYLE_INT);
+
+
+
+    status=SensorInit(sensor, name, ADC, id);
+
+    UnityAssertEqualNumber((UNITY_INT)((OK)), (UNITY_INT)((status)), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(65), UNITY_DISPLAY_STYLE_INT);
+
+
+
+    status=SensorInit(sensor, name, UART, id);
+
+    UnityAssertEqualNumber((UNITY_INT)((OK)), (UNITY_INT)((status)), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(68), UNITY_DISPLAY_STYLE_INT);
+
+
+
+    status=SensorInit(sensor, name, I2C, id);
+
+    UnityAssertEqualNumber((UNITY_INT)((OK)), (UNITY_INT)((status)), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(71), UNITY_DISPLAY_STYLE_INT);
+
+
+
+    status=SensorInit(sensor, name, -1, id);
+
+    UnityAssertEqualNumber((UNITY_INT)((ERROR)), (UNITY_INT)((status)), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(74), UNITY_DISPLAY_STYLE_INT);
 
 }

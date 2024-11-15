@@ -19,16 +19,16 @@
   :line: 42
   :message: ''
   :unity_test_time: 0
-:failures:
 - :test: test_BadInterface
-  :line: 61
-  :message: Expected 2 Was 0
+  :line: 55
+  :message: ''
   :unity_test_time: 0
+:failures: []
 :ignores: []
 :counts:
   :total: 5
-  :passed: 4
-  :failed: 1
+  :passed: 5
+  :failed: 0
   :ignored: 0
 :stdout: []
-:time: 0.04375290000461973
+:time: 0.04417010000906885

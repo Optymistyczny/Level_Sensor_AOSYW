@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <string.h>
 
-enum interface {ADC,UART,I2C};
+enum interface {ADC=0,UART,I2C, INTERFACES_COUNT};
 typedef enum interface interface_t;
 
 struct sensor 

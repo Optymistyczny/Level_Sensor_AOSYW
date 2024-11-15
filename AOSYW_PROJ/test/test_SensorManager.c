@@ -57,6 +57,19 @@ void test_BadInterface(void)
     uint8_t id;
     char name[50];
     sensor_t* sensor;
+
     status_t status=SensorInit(sensor, name, 100, id);
+    TEST_ASSERT_EQUAL(ERROR,status);
+
+    status=SensorInit(sensor, name, ADC, id);
+    TEST_ASSERT_EQUAL(OK,status);
+    
+    status=SensorInit(sensor, name, UART, id);
+    TEST_ASSERT_EQUAL(OK,status);
+
+    status=SensorInit(sensor, name, I2C, id);
+    TEST_ASSERT_EQUAL(OK,status);
+
+    status=SensorInit(sensor, name, -1, id);
     TEST_ASSERT_EQUAL(ERROR,status);
 }
