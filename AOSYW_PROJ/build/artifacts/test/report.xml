@@ -9,14 +9,10 @@
 			<Name>test/test_SensorManager.c::test_SensorInitReturnValue</Name>
 		</Test>
 	</SuccessfulTests>
-	<IgnoredTests>
-		<Test id="3">
-			<Name>test/test_SensorManager.c::test_SensorManager_NeedToImplement</Name>
-		</Test>
-	</IgnoredTests>
+	<IgnoredTests/>
 	<Statistics>
-		<Tests>3</Tests>
-		<Ignores>1</Ignores>
+		<Tests>2</Tests>
+		<Ignores>0</Ignores>
 		<FailuresTotal>0</FailuresTotal>
 		<Errors>0</Errors>
 		<Failures>0</Failures>

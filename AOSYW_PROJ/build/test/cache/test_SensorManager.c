@@ -18,16 +18,6 @@ void tearDown(void)
 
 
 
-void test_SensorManager_NeedToImplement(void)
-
-{
-
-    UnityIgnore( (("Need to Implement SensorManager")), (UNITY_UINT)(14));
-
-}
-
-
-
 void test_isSensorInit(void)
 
 {
@@ -48,7 +38,7 @@ void test_isSensorInit(void)
 
 
 
-void test_SensorInitReturnValue(void)
+void test_ReturnStatus(void)
 
 {
 
@@ -72,6 +62,44 @@ void test_SensorInitReturnValue(void)
 
    ((void *)0)
 
-   ), (UNITY_UINT)(37), UNITY_DISPLAY_STYLE_UINT8);
+   ), (UNITY_UINT)(32), UNITY_DISPLAY_STYLE_UINT8);
+
+}
+
+
+
+void test_uninitializedArguments(void)
+
+{
+
+    uint8_t id;
+
+    char name[50];
+
+    interface_t interface;
+
+    sensor_t* sensor;
+
+    SensorInit(sensor, name, interface, id);
+
+
+
+    UnityAssertEqualNumber((UNITY_INT)((0)), (UNITY_INT)((strcmp(sensor->name,"NULL"))), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(43), UNITY_DISPLAY_STYLE_INT);
+
+    UnityAssertEqualNumber((UNITY_INT)(((uint8_t)NA)), (UNITY_INT)((sensor->interface)), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(44), UNITY_DISPLAY_STYLE_INT);
+
+    UnityAssertEqualNumber((UNITY_INT)((0)), (UNITY_INT)((sensor->id)), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(45), UNITY_DISPLAY_STYLE_INT);
 
 }
