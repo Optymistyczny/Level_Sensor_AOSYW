@@ -166,7 +166,8 @@ void test_isManager(void)
 {
     sensorManager_t manager;
     sensor_t sensor_arr [10];
-    status_t status = SensorManagerInit(sensor_arr, 10);
+    status_t status = SensorManagerInit(&manager, sensor_arr, 10);
     TEST_ASSERT_EQUAL(OK,status);
 }
+
 
