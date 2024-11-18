@@ -162,11 +162,11 @@ void test_too_long_name_initialization(void)
     TEST_ASSERT_EQUAL(ERROR,status);
 }
 
-
 void test_isManager(void)
 {
     sensorManager_t manager;
     sensor_t sensor_arr [10];
-    status_t status = SensorManagerInit(sensor_arr);
+    status_t status = SensorManagerInit(sensor_arr, 10);
     TEST_ASSERT_EQUAL(OK,status);
 }
+

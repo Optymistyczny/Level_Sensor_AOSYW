@@ -32,6 +32,6 @@ struct sensorManager
 typedef struct sensorManager sensorManager_t;
 
 status_t SensorInit(sensor_t* sensor, char* name,uint8_t name_len, interface_t interface, uint8_t id);
-status_t SensorManagerInit(sensor_t* sensor_arr);
+status_t SensorManagerInit(sensor_t* sensor_arr, uint8_t size);
 
 #endif // SENSORMANAGER_H

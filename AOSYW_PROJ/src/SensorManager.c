@@ -1,5 +1,7 @@
 #include "SensorManager.h"
 
+#define MAX_SENSORS 10
+
 status_t SensorInit(sensor_t* sensor, char* name, uint8_t name_len, interface_t interface, uint8_t id)
 {
     uint8_t MAX = 50;
@@ -25,7 +27,9 @@ status_t SensorInit(sensor_t* sensor, char* name, uint8_t name_len, interface_t 
     return ERROR;
 }
 
-status_t SensorManagerInit(sensor_t* sensor_arr)
+status_t SensorManagerInit(sensor_t* sensor_arr, uint8_t size)
 {
+    if(sensor_arr == NULL) return ERROR;
+    if(size < 0 || size > MAX_SENSORS) return ERROR;
     return OK;
 }
