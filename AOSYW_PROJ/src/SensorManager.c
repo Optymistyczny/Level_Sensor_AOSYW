@@ -22,5 +22,10 @@ status_t SensorInit(sensor_t* sensor, char* name, uint8_t name_len, interface_t 
         sensor->isInitializated=Initialized;
         return OK;
     }
-    return ERROR;;
+    return ERROR;
+}
+
+status_t SensorManagerInit(sensor_t* sensor_arr)
+{
+    return OK;
 }
