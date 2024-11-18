@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<TestRun>
+	<FailedTests/>
+	<SuccessfulTests>
+		<Test id="1">
+			<Name>test/test_SensorManager.c::test_isSensorInit</Name>
+		</Test>
+		<Test id="2">
+			<Name>test/test_SensorManager.c::test_ReturnStatusWhenGoodArguments</Name>
+		</Test>
+		<Test id="3">
+			<Name>test/test_SensorManager.c::test_nullSensor</Name>
+		</Test>
+		<Test id="4">
+			<Name>test/test_SensorManager.c::test_nullName</Name>
+		</Test>
+		<Test id="5">
+			<Name>test/test_SensorManager.c::test_BadInterface</Name>
+		</Test>
+		<Test id="6">
+			<Name>test/test_SensorManager.c::test_ID_only_positive</Name>
+		</Test>
+		<Test id="7">
+			<Name>test/test_SensorManager.c::test_proper_sensor_initialization</Name>
+		</Test>
+		<Test id="8">
+			<Name>test/test_SensorManager.c::test_multiple_initialization</Name>
+		</Test>
+		<Test id="9">
+			<Name>test/test_SensorManager.c::test_multiple_various_initialization</Name>
+		</Test>
+		<Test id="10">
+			<Name>test/test_SensorManager.c::test_too_long_name_initialization</Name>
+		</Test>
+		<Test id="11">
+			<Name>test/test_SensorManager.c::test_isManager</Name>
+		</Test>
+	</SuccessfulTests>
+	<IgnoredTests/>
+	<Statistics>
+		<Tests>11</Tests>
+		<Ignores>0</Ignores>
+		<FailuresTotal>0</FailuresTotal>
+		<Errors>0</Errors>
+		<Failures>0</Failures>
+	</Statistics>
+</TestRun>
