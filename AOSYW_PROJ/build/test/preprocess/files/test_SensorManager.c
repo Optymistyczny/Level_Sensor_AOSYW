@@ -448,7 +448,7 @@ void test_isManager(void)
 
     sensor_t sensor_arr [10];
 
-    status_t status = SensorManagerInit(sensor_arr, 10);
+    status_t status = SensorManagerInit(&manager, sensor_arr, 10);
 
     UnityAssertEqualNumber((UNITY_INT)((OK)), (UNITY_INT)((status)), (
 

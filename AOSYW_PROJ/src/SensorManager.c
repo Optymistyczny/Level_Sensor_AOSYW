@@ -27,9 +27,10 @@ status_t SensorInit(sensor_t* sensor, char* name, uint8_t name_len, interface_t 
     return ERROR;
 }
 
-status_t SensorManagerInit(sensor_t* sensor_arr, uint8_t size)
+status_t SensorManagerInit(sensorManager_t* manager, sensor_t* sensor_array, uint8_t size)
 {
-    if(sensor_arr == NULL) return ERROR;
+    if(manager == NULL) return ERROR;
+    if(sensor_array == NULL) return ERROR;
     if(size < 0 || size > MAX_SENSORS) return ERROR;
     return OK;
 }
