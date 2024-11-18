@@ -165,9 +165,49 @@ void test_too_long_name_initialization(void)
 void test_isManager(void)
 {
     sensorManager_t manager;
-    sensor_t sensor_arr [10];
-    status_t status = SensorManagerInit(&manager, sensor_arr, 10);
+    sensor_t s1, s2, s3;
+    sensor_t* sensor_arr [3]={&s1, &s2, &s3};
+    status_t status = SensorManagerInit(&manager, sensor_arr, 3);
     TEST_ASSERT_EQUAL(OK,status);
 }
 
 
+void test_NullProtection(void)
+{
+    sensorManager_t manager;
+    sensor_t s1,s2;
+    sensor_t* s3_ptr=NULL;
+    sensor_t* sensor_arr [3]={&s1, &s2, s3_ptr};
+    status_t status = SensorManagerInit(&manager, sensor_arr, 3);
+    TEST_ASSERT_EQUAL(ERROR,status);
+}
+
+void test_sizeProtection(void)
+{
+    sensorManager_t manager;
+    sensor_t s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11;
+    sensor_t* sensor_arr [11]={&s1,&s2,&s3,&s4,&s5,&s6,&s7,&s8,&s9,&s10,&s11};
+    status_t status = SensorManagerInit(&manager, sensor_arr, 11);
+    TEST_ASSERT_EQUAL(ERROR,status);
+
+    sensorManager_t manager2;
+    sensor_t s12,s13,s14;
+    sensor_t* sensor_arr2 [3]={&s12,&s13,&s14};
+    status = SensorManagerInit(&manager2, sensor_arr2, 0);
+    TEST_ASSERT_EQUAL(ERROR,status);
+    
+    sensorManager_t manager3;
+    sensor_t s15,s16,s17;
+    sensor_t* sensor_arr3 [3]={&s15,&s16,&s17};
+    status = SensorManagerInit(&manager3, sensor_arr3,3);
+    TEST_ASSERT_EQUAL(OK,status);
+}
+
+void test_getReadingsFromSensor(void)
+{
+    sensorManager_t manager;
+    sensor_t sensor_arr [10]; //zakładam, że już są zainicjalizowane? 
+    status_t status = SensorManagerInit(&manager, sensor_arr, 10);
+    uint8_t sensor_id = 1;
+    float reading = GetValue(&manager,sensor_id);
+}

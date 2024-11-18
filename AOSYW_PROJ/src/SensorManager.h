@@ -26,12 +26,14 @@ typedef enum status status_t;
 
 struct sensorManager 
 {
-    sensor_t* sensor_arr;
+    sensor_t** sensor_arr;
+    uint8_t sensor_arr_size;
     initStatus_t isInitializated;
 };
 typedef struct sensorManager sensorManager_t;
 
 status_t SensorInit(sensor_t* sensor, char* name,uint8_t name_len, interface_t interface, uint8_t id);
-status_t SensorManagerInit(sensorManager_t* manager, sensor_t* sensor_array, uint8_t size);
+status_t SensorManagerInit(sensorManager_t* manager, sensor_t** sensor_array, uint8_t size);
 
+float GetValue(sensorManager_t*,uint8_t);
 #endif // SENSORMANAGER_H
