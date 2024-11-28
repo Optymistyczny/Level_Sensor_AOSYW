@@ -9,6 +9,9 @@ void tearDown(void)
 {
 }
 
+float adc_getFloatValue(sensor_itf_t* this);
+void adc_create(sensor_t* sensor);
+
 void test_isSensorInit(void)
 {
     uint8_t id=1;
@@ -94,6 +97,7 @@ void test_proper_sensor_initialization(void)
     char name[]="Water level sensor";
     interface_t interface=ADC;
     sensor_t sensor;
+    sensor.isInitializated=0;
     status_t status=SensorInit(&sensor,name, strlen(name), interface, id);
     TEST_ASSERT_EQUAL(OK,status);
     TEST_ASSERT_EQUAL(ADC,sensor.interface);
@@ -206,8 +210,27 @@ void test_sizeProtection(void)
 void test_getReadingsFromSensor(void)
 {
     sensorManager_t manager;
-    sensor_t sensor_arr [10]; //zakładam, że już są zainicjalizowane? 
-    status_t status = SensorManagerInit(&manager, sensor_arr, 10);
+    sensor_t s1;
+    s1.id=1;
+    adc_create(&s1); //interfejs s1 teraz przybiera postać interfejsu jak dla czujnika typu ADC
+    sensor_t* sensor_arr [1]={&s1};
+    status_t status = SensorManagerInit(&manager, sensor_arr, 1);
+
+
     uint8_t sensor_id = 1;
-    float reading = GetValue(&manager,sensor_id);
+    float reading = GetFloatValue(&manager,sensor_id);
+    TEST_ASSERT_EQUAL_FLOAT(123.123,reading);
+}
+
+
+/**
+ * Fejkowy sensor typu np. ADC
+ */
+float adc_getFloatValue(sensor_itf_t* this)
+{
+    return 123.123;
+}
+void adc_create(sensor_t* this)
+{
+    this->itf.getFloatValue=adc_getFloatValue;
 }
