@@ -1,61 +1,24 @@
 #include "SensorManager.h"
 
 #define MAX_SENSORS 10
-
-enum interface {ADC=0,UART,I2C, INTERFACES_COUNT};
-enum initStatus {Initialized=111,Uninitialized=112};
-enum status {OK, ERROR};
-struct sensor 
-{
-    sensor_itf_t itf;
-    char name[50];
-    interface_t interface;
-    uint8_t id;
-    initStatus_t isInitializated;
-};
-struct sensorManager 
-{
-    sensor_t** sensor_arr;
-    uint8_t sensor_arr_size;
-    initStatus_t isInitializated;
-};
-
-status_t SensorCreate(sensor_t* sensor)
-{
-    if(sensor==NULL)
-    {
-        return ERROR;
-    } 
-    else
-    { 
-        sensor->isInitializated=Initialized;
-        return OK;
-    }
-}
-
+#define MAX_NAME_LEN 50
 status_t SensorInit(sensor_t* sensor, char* name, uint8_t name_len, interface_t interface, uint8_t id)
 {
-    uint8_t MAX = 50;
     if(sensor == NULL) return ERROR;
 
     if(name == NULL) return ERROR;
 
-    if(name_len >= MAX) return ERROR;
+    if(name_len >= MAX_NAME_LEN) return ERROR;
 
     if(interface>(uint8_t)INTERFACES_COUNT || interface < 0) return ERROR;
 
     if(id<=0)return ERROR;
 
-    if(sensor->isInitializated!=Initialized)
-    {
-        strncpy(sensor->name,name, name_len);
-        sensor->name[sizeof(sensor->name)/sizeof(char)-1]='\0';
-        sensor->id=id;
-        sensor->interface=interface;
-        sensor->isInitializated=Initialized;
-        return OK;
-    }
-    return ERROR;
+    strncpy(sensor->name,name, name_len);
+    sensor->name[sizeof(sensor->name)/sizeof(char)-1]='\0';
+    sensor->id=id;
+    sensor->interface=interface;
+    return OK;
 }
 
 status_t SensorManagerInit(sensorManager_t* manager, sensor_t** sensor_array, uint8_t size)

@@ -97,7 +97,6 @@ void test_proper_sensor_initialization(void)
     char name[]="Water level sensor";
     interface_t interface=ADC;
     sensor_t sensor;
-    sensor.isInitializated=0;
     status_t status=SensorInit(&sensor,name, strlen(name), interface, id);
     TEST_ASSERT_EQUAL(OK,status);
     TEST_ASSERT_EQUAL(ADC,sensor.interface);
@@ -111,12 +110,11 @@ void test_multiple_initialization(void)
     char name[]="Water level sensor";
     interface_t interface=ADC;
     sensor_t sensor;
-    sensor.isInitializated=0;
     status_t status=SensorInit(&sensor,name, strlen(name), interface, id);
     TEST_ASSERT_EQUAL(OK,status);
     
     status=SensorInit(&sensor,name, strlen(name), interface, id);
-    TEST_ASSERT_EQUAL(ERROR,status);
+    TEST_ASSERT_EQUAL(OK,status);
 }
 
 void test_multiple_various_initialization(void)
