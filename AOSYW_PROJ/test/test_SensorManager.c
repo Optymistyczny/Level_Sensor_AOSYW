@@ -19,201 +19,90 @@ void test_isSensorInit(void)
     TEST_ASSERT_EQUAL(OK,status);
 }
 
-// void test_ReturnStatusWhenGoodArguments(void)
-// {
-//     uint8_t id=1;
-//     char name[50];
-//     interface_t interface=ADC;
-//     sensor_t sensor;
+void test_Empty_or_Bad_Name(void)
+{
+    //ASCII covers range from 0 to 127
+    status_t status;
 
-//     status_t status;
-//     status=SensorInit(&sensor, name, strlen(name), interface,id);
-//     TEST_ASSERT_EQUAL(OK, status);
-// }
-
-// void test_nullSensor(void)
-// {
-//     uint8_t id=1;
-//     char name[50];
-//     interface_t interface=ADC;
-//     status_t status=SensorInit(NULL, name, strlen(name), interface, id);
-//     TEST_ASSERT_EQUAL(ERROR,status);
-// }
-
-// void test_nullName(void)
-// {
-//     uint8_t id=1;
-//     interface_t interface=ADC;
-//     sensor_t sensor;
-//     status_t status=SensorInit(&sensor, NULL, 0 , interface, id);
-//     TEST_ASSERT_EQUAL(ERROR,status);
-// }
-
-// /**
-//  * W tym momencie zacząłem się zastanawiać, czy nie lepiej użyć zmiennych globalnych, bo cały czas inicjalizuję te same dane.
-//  */
-
-// void test_BadInterface(void)
-// {
-//     uint8_t id=1;
-//     char name[50];
-//     sensor_t sensor;
-
-//     status_t status=SensorInit(&sensor, name, strlen(name), 100, id);
-//     TEST_ASSERT_EQUAL(ERROR,status);
-
-//     sensor_t sensor1;
-//     status=SensorInit(&sensor1, name, strlen(name), ADC, id);
-//     TEST_ASSERT_EQUAL(OK,status);
+    char name [127][2];
+    for (uint8_t i = 1; i <= 127; i++) {
+        name[i - 1][0] = (char)i;  // Wstaw znak ASCII
+        name[i - 1][1] = '\0';     // Dodaj terminator '\0', aby był to prawidłowy string
+    }
     
-//     sensor_t sensor2;
-//     status=SensorInit(&sensor2, name, strlen(name), UART, id);
-//     TEST_ASSERT_EQUAL(OK,status);
+    for(uint8_t i=1; i<=127; i++)
+    {
+        status=SensorInit(name[i-1],ADC,1); 
+        TEST_ASSERT_EQUAL(OK,status);
+    }
 
-//     sensor_t sensor3;
-//     status=SensorInit(&sensor3, name, strlen(name), I2C, id);
-//     TEST_ASSERT_EQUAL(OK,status);
+    char name1 []={(char)-1};
+    status=SensorInit(name1,ADC,1); // Out of range
+    TEST_ASSERT_EQUAL(ERROR,status);
 
-//     sensor_t sensor4;
-//     status=SensorInit(&sensor4, name, strlen(name), -1, id);
-//     TEST_ASSERT_EQUAL(ERROR,status);
-// }
+    char name2 []={(char)0};
+    status=SensorInit(name2,ADC,1); // ASCII '\0'
+    TEST_ASSERT_EQUAL(ERROR,status);
 
-// void test_ID_only_positive(void)
-// {
-//     char name[50];
-//     sensor_t sensor;
-//     interface_t interface=ADC;
-//     status_t status=SensorInit(&sensor, name, strlen(name), interface, 0);
-//     TEST_ASSERT_EQUAL(ERROR,status);
-// }
+    char name3 []={(char)128};
+    status=SensorInit(name3,ADC,1); // Out of range
+    TEST_ASSERT_EQUAL(ERROR,status);
+}
 
-// void test_proper_sensor_initialization(void)
-// {
-//     uint8_t id=1;
-//     char name[]="Water level sensor";
-//     interface_t interface=ADC;
-//     sensor_t sensor;
-//     status_t status=SensorInit(&sensor,name, strlen(name), interface, id);
-//     TEST_ASSERT_EQUAL(OK,status);
-//     TEST_ASSERT_EQUAL(ADC,sensor.interface);
-//     TEST_ASSERT_EQUAL(0,strncmp(sensor.name,name,strlen(name)));
-//     TEST_ASSERT_EQUAL(1,sensor.id);
-// }
+void test_BadInterface(void)
+{
+    status_t status=SensorInit("Level Sensor", -1, 1);
+    TEST_ASSERT_EQUAL(ERROR,status);
 
-// void test_multiple_initialization(void)
-// {
-//     uint8_t id=1;
-//     char name[]="Water level sensor";
-//     interface_t interface=ADC;
-//     sensor_t sensor;
-//     status_t status=SensorInit(&sensor,name, strlen(name), interface, id);
-//     TEST_ASSERT_EQUAL(OK,status);
+    status=SensorInit("Level Sensor", ADC, 1);
+    TEST_ASSERT_EQUAL(OK,status);
     
-//     status=SensorInit(&sensor,name, strlen(name), interface, id);
-//     TEST_ASSERT_EQUAL(OK,status);
-// }
+    status=SensorInit("Level Sensor", UART, 1);
+    TEST_ASSERT_EQUAL(OK,status);
 
-// void test_multiple_various_initialization(void)
-// {
-//     uint8_t id1=1;
-//     char name1[]="Water level sensor";
-//     interface_t interface1=ADC;
-//     sensor_t Level_sensor;
-//     status_t status1=SensorInit(&Level_sensor,name1, strlen(name1), interface1, id1);
-//     TEST_ASSERT_EQUAL(OK,status1);
-//     TEST_ASSERT_EQUAL(0,strncmp(Level_sensor.name,name1,strlen(name1)));
-    
-//     uint8_t id2=2;
-//     char name2[]="Temperature sensor";
-//     interface_t interface2=UART;
-//     sensor_t Temp_sensor;
-//     status_t status2=SensorInit(&Temp_sensor,name2, strlen(name2), interface2, id2);
-//     TEST_ASSERT_EQUAL(OK,status2);
-//     TEST_ASSERT_EQUAL(0,strncmp(Temp_sensor.name,name2,strlen(name2)));
+    status=SensorInit("Level Sensor", I2C, 1);
+    TEST_ASSERT_EQUAL(OK,status);
 
-//     uint8_t id3=3;
-//     char name3[]="Moisture level sensor";
-//     interface_t interface3=I2C;
-//     sensor_t Moist_sensor;
-//     status_t status3=SensorInit(&Moist_sensor,name3, strlen(name3), interface3, id3);
-//     TEST_ASSERT_EQUAL(OK,status3);
-//     TEST_ASSERT_EQUAL(0,strncmp(Moist_sensor.name,name3,strlen(name3)));
-// }
-// void test_too_long_name_initialization(void)
-// {
-//     uint8_t id=1;
-//     char name[]="Water level sensorrrrrrrrrrrrrrrrrrrrrrrrrrrrr48";  
-//     interface_t interface=ADC;
-//     sensor_t sensor;
-//     status_t status=SensorInit(&sensor,name,strlen(name), interface, id);
-//     TEST_ASSERT_EQUAL(OK,status);
-//     TEST_ASSERT_EQUAL(0,strncmp(sensor.name,name,strlen(name)));
+    status=SensorInit("Level Sensor", INTERFACES_COUNT, 1);
+    TEST_ASSERT_EQUAL(ERROR,status);
+}
 
-//     char name1[]="Water level sensorrrrrrrrrrrrrrrrrrrrrrrrrrrrrr49";
-//     sensor_t sensor1;
-//     status=SensorInit(&sensor1,name1,strlen(name1), interface, id);
-//     TEST_ASSERT_EQUAL(OK,status);
-//     TEST_ASSERT_EQUAL(0,strncmp(sensor1.name,name1,strlen(name1)));
+void test_IDs_and_Number_of_sensors(void)
+{
+    status_t status;
+ 
+    for(uint8_t i=SENSORS;i>=1;i--)
+    {
+        status=SensorInit("Level Sensor", ADC, i);
+        TEST_ASSERT_EQUAL(OK,status);
+    }    
+    status=SensorInit("Level Sensor", ADC, SENSORS+1);
+    TEST_ASSERT_EQUAL(ERROR,status);
+    status=SensorInit("Level Sensor", ADC, 0);
+    TEST_ASSERT_EQUAL(ERROR,status);
+}
 
-//     char name2[]="Water level sensorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr50";
-//     sensor_t sensor2;
-//     status=SensorInit(&sensor2,name2,strlen(name2), interface, id);
-//     TEST_ASSERT_EQUAL(ERROR,status);
-// }
+void test_proper_sensor_initialization(void)
+{
+    uint8_t id=1;
+    char name[]="Water level sensor";
+    char name_buff[MAX_NAME_LEN];
+    interface_t interface = ADC;
+    interface_t interface2;
+    status_t status=SensorInit(name, interface, id);
+    TEST_ASSERT_EQUAL(OK,status);
+    status=sensorGetInterface(id, &interface2);
+    TEST_ASSERT_EQUAL(OK,status);
+    TEST_ASSERT_EQUAL(ADC,interface2);
 
-// void test_isManager(void)
-// {
-//     sensorManager_t manager;
-//     sensor_t s1, s2, s3;
-//     sensor_t* sensor_arr [3]={&s1, &s2, &s3};
-//     status_t status = SensorManagerInit(&manager, sensor_arr, 3);
-//     TEST_ASSERT_EQUAL(OK,status);
-// }
+    status=sensorGetName(id, name_buff);
+    TEST_ASSERT_EQUAL(OK,status);
+    TEST_ASSERT_EQUAL(0,strcmp(name_buff,name));
+}
 
-
-// void test_NullProtection(void)
-// {
-//     sensorManager_t manager;
-//     sensor_t s1,s2;
-//     sensor_t* s3_ptr=NULL;
-//     sensor_t* sensor_arr [3]={&s1, &s2, s3_ptr};
-//     status_t status = SensorManagerInit(&manager, sensor_arr, 3);
-//     TEST_ASSERT_EQUAL(ERROR,status);
-// }
-
-// void test_sizeProtection(void)
-// {
-//     sensorManager_t manager;
-//     sensor_t s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11;
-//     sensor_t* sensor_arr [11]={&s1,&s2,&s3,&s4,&s5,&s6,&s7,&s8,&s9,&s10,&s11};
-//     status_t status = SensorManagerInit(&manager, sensor_arr, 11);
-//     TEST_ASSERT_EQUAL(ERROR,status);
-
-//     sensorManager_t manager2;
-//     sensor_t s12,s13,s14;
-//     sensor_t* sensor_arr2 [3]={&s12,&s13,&s14};
-//     status = SensorManagerInit(&manager2, sensor_arr2, 0);
-//     TEST_ASSERT_EQUAL(ERROR,status);
-    
-//     sensorManager_t manager3;
-//     sensor_t s15,s16,s17;
-//     sensor_t* sensor_arr3 [3]={&s15,&s16,&s17};
-//     status = SensorManagerInit(&manager3, sensor_arr3,3);
-//     TEST_ASSERT_EQUAL(OK,status);
-// }
-
-// void test_getReadingsFromSensor(void)
-// {
-//     sensorManager_t manager;
-//     sensor_t s1;
-//     s1.id=1;
-//     adc_create(&s1); //interfejs s1 teraz przybiera postać interfejsu jak dla czujnika typu ADC
-//     sensor_t* sensor_arr [1]={&s1};
-//     status_t status = SensorManagerInit(&manager, sensor_arr, 1);
-
-
-//     uint8_t sensor_id = 1;
-//     float reading = GetFloatValue(&manager,sensor_id);
-//     TEST_ASSERT_EQUAL_FLOAT(123.123,reading);
-// }
+void test_getReadingsFromSensor(void)
+{
+    status_t status = SensorInit("Water Level Sensor",ADC,1);
+    float reading = GetFloatValue(1);
+    TEST_ASSERT_EQUAL_FLOAT(123.123,reading);
+}
