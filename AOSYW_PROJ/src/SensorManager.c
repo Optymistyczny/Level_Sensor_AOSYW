@@ -2,6 +2,21 @@
 
 #define MAX_SENSORS 10
 #define MAX_NAME_LEN 50
+
+enum interface { ADC = 0, UART, I2C, INTERFACES_COUNT };
+enum status { OK, ERROR };
+
+struct sensor_itf {
+    float (*getFloatValue)(sensor_t* this);
+};
+
+struct sensor {
+    sensor_itf_t itf;
+    char name[MAX_NAME_LEN + 1];
+    interface_t interface;
+    uint8_t id;
+};
+
 status_t SensorInit(sensor_t* sensor, char* name, uint8_t name_len, interface_t interface, uint8_t id)
 {
     if(sensor == NULL) return ERROR;
@@ -47,7 +62,7 @@ float GetFloatValue(sensorManager_t* manager,uint8_t sensor_id)
         {
             if (manager->sensor_arr[i]->itf.getFloatValue != NULL)
             {
-                return manager->sensor_arr[i]->itf.getFloatValue((sensor_itf_t*)(manager->sensor_arr[i]));
+                return manager->sensor_arr[i]->itf.getFloatValue((manager->sensor_arr[i]));
             }
         }
         else return -1.0f;
