@@ -6,20 +6,13 @@
 #include <string.h>
 #include <stdio.h>
 
-// Forward declarations
-typedef struct sensor sensor_t;
-typedef struct sensor_itf sensor_itf_t;
-typedef enum interface interface_t;
 typedef enum status status_t;
+typedef enum interface interface_t;
+enum status { OK, ERROR };
+enum interface { ADC = 0, UART, I2C, INTERFACES_COUNT };
 
-struct sensorManager 
-{
-    sensor_t** sensor_arr;
-    uint8_t sensor_arr_size;
-};
-typedef struct sensorManager sensorManager_t;
-
-status_t SensorManagerInit(sensorManager_t* manager, sensor_t** sensor_array, uint8_t size);
-float GetFloatValue(sensorManager_t* manager, uint8_t sensor_id);
+//zamiast przekazywać dwa parametry jak char* i długość to daję samą tablicę
+status_t SensorInit(char name[], interface_t interface, uint8_t id);
+float GetFloatValue(uint8_t id);
 
 #endif // SENSORMANAGER_H
