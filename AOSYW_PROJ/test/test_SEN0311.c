@@ -51,3 +51,4 @@ void test_processingInput(void)
     TEST_ASSERT_EQUAL(OK,status);
     TEST_ASSERT_EQUAL_FLOAT(511,out);
 }
+

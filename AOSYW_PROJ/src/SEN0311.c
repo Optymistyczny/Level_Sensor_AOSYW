@@ -7,8 +7,21 @@
 
 float SEN0311getFloatValue(sensor_t* sensor)
 {
-    printf("\nI am SEN0311");
-    return 1.0;
+    status_t status;
+    uint8_t buff [EXPECTED_LEN]={};
+    float out = 0.0;
+
+    if(NULL==sensor)status = ERROR;
+
+    if(OK == status)
+    {
+        status_t status;
+        SEN0311_UART_Receive(buff, EXPECTED_LEN);
+        status=processInput(buff, EXPECTED_LEN, &out);
+    }
+
+    if(ERROR==status) out = 0.0;
+    return out;
 }
 
 status_t processInput(const uint8_t* buff, const uint8_t len, float* out)
