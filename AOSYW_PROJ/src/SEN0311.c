@@ -16,8 +16,8 @@ float SEN0311getFloatValue(sensor_t* sensor)
     if(OK == status)
     {
         status_t status;
-        SEN0311_UART_Receive(buff, EXPECTED_LEN);
-        status=processInput(buff, EXPECTED_LEN, &out);
+        status=SEN0311_UART_Receive(buff, EXPECTED_LEN);
+        status=status | processInput(buff, EXPECTED_LEN, &out);
     }
 
     if(ERROR==status) out = 0.0;
@@ -45,4 +45,9 @@ status_t processInput(const uint8_t* buff, const uint8_t len, float* out)
         *out = 0.0;
     }
     return status;
+}
+
+status_t SEN0311_UART_Receive(uint8_t* buff,const uint8_t len)
+{
+    return OK;
 }
