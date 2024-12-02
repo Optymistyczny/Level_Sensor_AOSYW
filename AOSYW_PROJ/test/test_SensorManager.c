@@ -40,21 +40,21 @@ void test_Empty_or_Bad_Name(void)
 
     char name1 []={(char)-1};
     status=sensorInit(name1,SEN0311,1); // Out of range
-    TEST_ASSERT_EQUAL(ERROR,status);
+    TEST_ASSERT_EQUAL(ERR,status);
 
     char name2 []={(char)0};
     status=sensorInit(name2,SEN0311,1); // ASCII '\0'
-    TEST_ASSERT_EQUAL(ERROR,status);
+    TEST_ASSERT_EQUAL(ERR,status);
 
     char name3 []={(char)128};
     status=sensorInit(name3,SEN0311,1); // Out of range
-    TEST_ASSERT_EQUAL(ERROR,status);
+    TEST_ASSERT_EQUAL(ERR,status);
 }
 
 void test_BadSensorType(void)
 {
     status_t status=sensorInit("Level Sensor", -1, 1);
-    TEST_ASSERT_EQUAL(ERROR,status);
+    TEST_ASSERT_EQUAL(ERR,status);
 
     status=sensorInit("Level Sensor", SEN0311, 1);
     TEST_ASSERT_EQUAL(OK,status);
@@ -63,7 +63,7 @@ void test_BadSensorType(void)
     TEST_ASSERT_EQUAL(OK,status);
 
     status=sensorInit("Level Sensor", SENSORS_COUNT, 1);
-    TEST_ASSERT_EQUAL(ERROR,status);
+    TEST_ASSERT_EQUAL(ERR,status);
 }
 
 void test_IDs_and_Number_of_sensors(void)
@@ -76,9 +76,9 @@ void test_IDs_and_Number_of_sensors(void)
         TEST_ASSERT_EQUAL(OK,status);
     }    
     status=sensorInit("Level Sensor", SEN0311, SENSORS+1);
-    TEST_ASSERT_EQUAL(ERROR,status);
+    TEST_ASSERT_EQUAL(ERR,status);
     status=sensorInit("Level Sensor", SEN0311, 0);
-    TEST_ASSERT_EQUAL(ERROR,status);
+    TEST_ASSERT_EQUAL(ERR,status);
 }
 
 void test_proper_sensor_initialization(void)

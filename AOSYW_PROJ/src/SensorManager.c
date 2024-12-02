@@ -12,33 +12,33 @@ sensor_t sensor_arr [SENSORS]={0};
 
 status_t sensorInit(char name[], sensor_type_t sensor_type, uint8_t id)
 {
-    status_t status=OK;
+    status_t status=OKK;
     //Assertions
     if(strlen(name)==0 || strlen(name)>=MAX_NAME_LEN) 
     {
 
         // printf("\nName length err. Len = %d", strlen(name));
-        status=ERROR;
+        status=ERR;
     }
     if(sensor_type>=(uint8_t)SENSORS_COUNT || sensor_type < 0)
     {
-        // printf("\nSensor type error. Sensor type:  %00d", sensor_type);
-        status=ERROR;
+        // printf("\nSensor type ERR. Sensor type:  %00d", sensor_type);
+        status=ERR;
     }        
-    if(id < 1 || id > SENSORS)
+    if(id < 1 || id >= SENSORS)
     {
-        // printf("\nID error. ID = %d",id);
-        status=ERROR;
+        // printf("\nID ERR. ID = %d",id);
+        status=ERR;
     } 
     for(uint8_t i=0;i<strlen(name);i++)
     {
         if(name[i]<1 || name[i]>127) 
         {
-            status=ERROR;
+            status=ERR;
             break;
         }
     }
-    if(status!=ERROR)
+    if(status!=ERR)
     {
         id-=1;
         strncpy(sensor_arr[id].name, name, strlen(name));
@@ -60,7 +60,7 @@ status_t sensorInit(char name[], sensor_type_t sensor_type, uint8_t id)
             //     bind_some_other_sensor_itf(id);
             //     break;               
             default:
-                status = ERROR;
+                status = ERR;
                 break;
             }
     }
@@ -69,29 +69,29 @@ status_t sensorInit(char name[], sensor_type_t sensor_type, uint8_t id)
 
 status_t sensorGetName(uint8_t id, char* buff)
 {
-    status_t status=OK;
+    status_t status=OKK;
     if(id < 1 || id > SENSORS)
     {
-        // printf("\nID error. ID = %d",id);
-        status=ERROR;
+        // printf("\nID ERR. ID = %d",id);
+        status=ERR;
     } 
     else
     {
         id-=1;
         strcpy(buff, sensor_arr[id].name); //kopiowanie do '\0'
         buff[strlen(sensor_arr[id].name)] = '\0';
-        status = OK;
+        status = OKK;
     }
     return status;
 }
 
 status_t sensorGetSensorType(uint8_t id, sensor_type_t* sensor_type)
 {
-    status_t status=OK;
+    status_t status=OKK;
     if(id < 1 || id > SENSORS)
     {
-        // printf("\nID error. ID = %d",id);
-        status=ERROR;
+        // printf("\nID ERR. ID = %d",id);
+        status=ERR;
     } 
     else
     {
@@ -103,7 +103,16 @@ status_t sensorGetSensorType(uint8_t id, sensor_type_t* sensor_type)
 
 float getFloatValue(uint8_t id)
 {
-    return sensor_arr[id].itf.getFloatValue(&sensor_arr[id]);
+	if(id < 1 || id >= SENSORS)
+	{
+		return -1.0;
+	}
+	id-=1;
+	if(NULL!=sensor_arr[id].itf.getFloatValue)
+	{
+		return sensor_arr[id].itf.getFloatValue(&sensor_arr[id]);
+	}
+	else return -1.0;
 }   
 
 static void bind_SEN0311_itf(sensor_t* sensor)
