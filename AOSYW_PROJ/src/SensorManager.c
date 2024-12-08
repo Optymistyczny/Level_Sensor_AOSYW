@@ -1,126 +1,189 @@
 #include "SensorManager.h"
 #include "SensorManagerData.h"
+#include "stdio.h"
+#include <stddef.h>
 
-//Sensors
+
+//Sensor interfaces
 #include "SEN0311.h"
 #include "DS18B20.h"
 
-static void bind_SEN0311_itf(sensor_t*);
-static void bind_DS18B20_itf(sensor_t*);
+sensor_t* sensor_array[SENSORS]={0};
+temp_sensor_t temp_sensor;
+dist_sensor_t dist_sensor;
 
-sensor_t sensor_arr [SENSORS]={0};
+static status_t bind_dist_itf(sensor_t* sensor)
+{ 
+    if(NULL == sensor)
+    {
+        //printf("\nSensor null...");
+        return ERR; 
+    } 
+    if(distance_sensor != sensor->sensor_type)
+    {
+        //printf("\nNot dist sensor...");
+        return ERR; 
+    } 
+    dist_sensor_t* this = (dist_sensor_t*)(sensor); 
 
-status_t sensorInit(char name[], sensor_type_t sensor_type, uint8_t id)
+    this->base.base_itf.getName=SEN0311_getName;
+    this->dist_itf.getDistance_m=SEN0311_getDistance_m;
+    this->dist_itf.getDistance_mm=SEN0311_getDistance_mm;
+    return OKK;
+}
+
+static status_t bind_temp_itf(sensor_t* sensor)
+{ 
+    if(NULL == sensor)
+    {
+        //printf("\nSensor null...");
+        return ERR; 
+    } 
+    if(temperature_sensor!=sensor->sensor_type)
+    {
+        //printf("\nNot temp sensor...");
+        return ERR; 
+    } 
+    temp_sensor_t* this = (temp_sensor_t*)(sensor); 
+
+    this->base.base_itf.getName=DS18B20_getName;
+    this->temp_itf.getTemp_Celcious=DS18B20_getTemp_Celcious;
+    this->temp_itf.getTemp_Fahrenheit=DS18B20_getTemp_Fahrenheit;
+    return OKK;
+}
+
+static status_t bind_interfaces()
 {
     status_t status=OKK;
-    //Assertions
-    if(strlen(name)==0 || strlen(name)>=MAX_NAME_LEN) 
-    {
+    //printf("\nBinding temp itf...");
+    status = bind_temp_itf((sensor_array[TEMPERATURE_SENSOR_ID]));
+    //printf("\nDone. Status %d", status);
+    //printf("\nBinding dist itf...");
+    status = bind_dist_itf((sensor_array[DISTANCE_SENSOR_ID]));
+    //printf("\nDone. Status %d", status);
 
-        // printf("\nName length err. Len = %d", strlen(name));
-        status=ERR;
-    }
-    if(sensor_type>=(uint8_t)SENSORS_COUNT || sensor_type < 0)
-    {
-        // printf("\nSensor type ERR. Sensor type:  %00d", sensor_type);
-        status=ERR;
-    }        
-    if(id < 1 || id >= SENSORS)
-    {
-        // printf("\nID ERR. ID = %d",id);
-        status=ERR;
-    } 
-    for(uint8_t i=0;i<strlen(name);i++)
-    {
-        if(name[i]<1 || name[i]>127) 
-        {
-            status=ERR;
-            break;
-        }
-    }
-    if(status!=ERR)
-    {
-        id-=1;
-        strncpy(sensor_arr[id].name, name, strlen(name));
-        sensor_arr[id].name[strlen(name)]='\0';
-        sensor_arr[id].sensor_type=sensor_type;
-
-        
-        //Rozbudowa o dodatkowe sensory poprzez zaimplementowanie interfejsu w pliku <nazwa_sensora>.c +.h i dodanie funkcji przypisującej interfejs do case'a.
-        //Należy pamiętać o inkluzji plików nagłówkowych do SensorManager.h oraz dodaniu prototypu funkcji bindującej na górze pliku.
-        switch (sensor_type)
-        {
-            case SEN0311:
-                bind_SEN0311_itf(&sensor_arr[id]);
-                break;
-            case DS18B20:
-                bind_DS18B20_itf(&sensor_arr[id]);
-                break;         
-            // case some_other_sensor:
-            //     bind_some_other_sensor_itf(id);
-            //     break;               
-            default:
-                status = ERR;
-                break;
-            }
-    }
+    //printf("\nDone.");
     return status;
 }
 
-status_t sensorGetName(uint8_t id, char* buff)
+status_t initialize()
 {
-    status_t status=OKK;
-    if(id < 1 || id > SENSORS)
+    dist_sensor.base.sensor_type=distance_sensor;
+    temp_sensor.base.sensor_type=temperature_sensor;
+
+    sensor_array[TEMPERATURE_SENSOR_ID]=(sensor_t*)&temp_sensor;
+    sensor_array[DISTANCE_SENSOR_ID]=(sensor_t*)&dist_sensor;
+
+    if(ERR == bind_interfaces()) return ERR;
+
+    return OKK;
+}
+
+status_t getDistance_m(float* distance)
+{    
+    if(NULL == distance)
     {
-        // printf("\nID ERR. ID = %d",id);
-        status=ERR;
+        return ERR;
     } 
-    else
+    if(distance_sensor!=sensor_array[DISTANCE_SENSOR_ID]->sensor_type || NULL == sensor_array[DISTANCE_SENSOR_ID])
     {
-        id-=1;
-        strcpy(buff, sensor_arr[id].name); //kopiowanie do '\0'
-        buff[strlen(sensor_arr[id].name)] = '\0';
-        status = OKK;
-    }
-    return status;
-}
-
-status_t sensorGetSensorType(uint8_t id, sensor_type_t* sensor_type)
-{
-    status_t status=OKK;
-    if(id < 1 || id > SENSORS)
-    {
-        // printf("\nID ERR. ID = %d",id);
-        status=ERR;
+        return ERR;
     } 
-    else
+    dist_sensor_t* this = (dist_sensor_t*)sensor_array[DISTANCE_SENSOR_ID];
+    
+    if(NULL == this->dist_itf.getDistance_m)
     {
-        id-=1;
-        *sensor_type = sensor_arr[id].sensor_type;
+        return ERR;
     }
-    return status;
+    this->dist_itf.getDistance_m(sensor_array[DISTANCE_SENSOR_ID],distance);
+    return OKK;
 }
 
-float getFloatValue(uint8_t id)
-{
-	if(id < 1 || id >= SENSORS)
-	{
-		return -1.0;
-	}
-	id-=1;
-	if(NULL!=sensor_arr[id].itf.getFloatValue)
-	{
-		return sensor_arr[id].itf.getFloatValue(&sensor_arr[id]);
-	}
-	else return -1.0;
-}   
-
-static void bind_SEN0311_itf(sensor_t* sensor)
-{
-    sensor->itf.getFloatValue=SEN0311getFloatValue;
+status_t getDistance_mm(float* distance)
+{   
+    if(NULL == distance)
+    {
+        return ERR;
+    } 
+    if(distance_sensor!=sensor_array[DISTANCE_SENSOR_ID]->sensor_type || NULL == sensor_array[DISTANCE_SENSOR_ID])
+    {
+        return ERR;
+    } 
+    dist_sensor_t* this = (dist_sensor_t*)sensor_array[DISTANCE_SENSOR_ID];
+    
+    if(NULL == this->dist_itf.getDistance_mm)
+    {
+        return ERR;
+    }
+    this->dist_itf.getDistance_mm(sensor_array[DISTANCE_SENSOR_ID],distance);
+    return OKK;
 }
 
-static void bind_DS18B20_itf(sensor_t* sensor)
-{
-    sensor->itf.getFloatValue=DS18B20getFloatValue;
+status_t getTemperature_Celcious(float* temperature)
+{    
+    if(NULL == temperature)
+    {
+        return ERR;
+    } 
+    if(temperature_sensor!=sensor_array[TEMPERATURE_SENSOR_ID]->sensor_type || NULL == sensor_array[TEMPERATURE_SENSOR_ID])
+    {
+        return ERR;
+    } 
+    temp_sensor_t* this = (temp_sensor_t*)sensor_array[DISTANCE_SENSOR_ID];
+    
+    if(NULL == this->temp_itf.getTemp_Celcious)
+    {
+        return ERR;
+    }
+    this->temp_itf.getTemp_Celcious(sensor_array[DISTANCE_SENSOR_ID],temperature);
+    return OKK;
 }
+
+status_t getTemperature_Fahrenheit(float* temperature)
+{    
+    if(NULL == temperature)
+    {
+        return ERR;
+    } 
+    if(temperature_sensor!=sensor_array[TEMPERATURE_SENSOR_ID]->sensor_type || NULL == sensor_array[TEMPERATURE_SENSOR_ID])
+    {
+        return ERR;
+    } 
+    temp_sensor_t* this = (temp_sensor_t*)sensor_array[DISTANCE_SENSOR_ID];
+    
+    if(NULL == this->temp_itf.getTemp_Fahrenheit)
+    {
+        return ERR;
+    }
+    this->temp_itf.getTemp_Fahrenheit(sensor_array[DISTANCE_SENSOR_ID], temperature);
+    return OKK;
+}
+
+status_t getDistanceSensorName(char* buffer, const uint8_t len)
+{
+    if(NULL == buffer || len <=0) 
+    {
+        return ERR;
+    }
+
+    for(uint8_t i=0;i<len;i++)
+    {
+        buffer[i]='A';
+    }
+    return OKK;
+}
+
+status_t getTempSensorName(char* buffer, const uint8_t len)
+{
+    if(NULL == buffer || len <=0) 
+    {
+        return ERR;
+    }
+
+    for(uint8_t i=0;i<len;i++)
+    {
+        buffer[i]='A';
+    }
+    return OKK;
+}
+ 
