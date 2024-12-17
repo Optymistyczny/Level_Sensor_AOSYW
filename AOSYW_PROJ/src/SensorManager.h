@@ -21,7 +21,7 @@ status_t getTempSensorName(char*, const uint8_t);
 // Wskaźnik na void* - adres komórki pamięci z najmniejszą adresacją dostępną (8 bit np.)
  
 // Implementacja z wykorzystaniem FreeRTOS'a, kolejki i wzorca klient-serwer:
-// Dwa taski -nr 1 dpowiedzialny za umieszczanie żądań w kolejce. Nr 2 odpowiedzialny za obsługę zakolejkowanych żądań. Kiedy żądań nie ma - task nr 2 jest uśpiony. 
+// Dwa taski (kliencki) -nr 1 dpowiedzialny za umieszczanie żądań w kolejce. Nr 2 odpowiedzialny za obsługę zakolejkowanych żądań. Kiedy żądań nie ma - task nr 2 jest uśpiony. 
 // Oba taski korzystają z semafora liczącego, żeby było wiadome ile zadań umieszczone jest w kolejne. Task nr 1 inkrementuje semafor a task nr 2 go dekrementuje. 
 
 // Dlaczego kolejka? Eliminuje zagrożenie równoczesnego dostępu do zasobów, czyli zapewnia, że dwa różne taski nie będą odwoływały się do struktur jak np. sensor_t* sensor_array[SENSORS].
