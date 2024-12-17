@@ -32,7 +32,6 @@ status_t SEN0311_getDistance_m(const sensor_t* const sensor,float* val)
     if(-1 == *val) return ERR;
     else return OKK;
 }
-
 status_t SEN0311_getName(const sensor_t* const sensor, char* buffer, const uint8_t len)
 {
     if(NULL == sensor || NULL == buffer) return ERR;
