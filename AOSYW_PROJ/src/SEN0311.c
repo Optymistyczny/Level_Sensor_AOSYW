@@ -1,9 +1,10 @@
 #include "SEN0311.h"
 #include <stddef.h>
 
-
- #include "stm32l0xx_hal.h"
- #include "main.h"
+#include "stm32h7xx_hal.h"
+//#include "stm32l0xx_hal.h"
+#include "main.h"
+#include "math.h"
 
 #define HEADER_BYTE 0
 #define HBYTE 1
@@ -18,9 +19,17 @@ float SEN0311getFloatValue(void);
 //Interface functions
 status_t SEN0311_getDistance_mm(const sensor_t* const sensor, float* val)
 {
-    if(NULL == sensor || NULL == val) return ERR;
+	#define EPSILON 1e-6
+    if(NULL == sensor || NULL == val)
+	{
+    	return ERR;
+	}
     *val = SEN0311getFloatValue();
-    if(-1 == *val) return ERR;
+//    if(-1 == *val) // porównanie float z liczbą stałoprzecinkową !
+	if (fabs(*val - (-1.0f)) < EPSILON)
+	{
+    	return ERR;
+	}
     else return OKK;
 }
 
