@@ -1,1 +1,0 @@
-Projekt AOSYW... Plik testowy.
